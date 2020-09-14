@@ -30,6 +30,29 @@ using std::vector;
 // May eventually want to take parameters for nonneg, explore, uniform, nonterminal succs,
 // num nonterminal succs.
 // Note: doesn't handle nodes with one succ
+
+
+/*succ stands for successor -Brian*/
+/*Calculates playing strategy by using regret matching
+  1) sum all positive regrets
+  2) each actions strategy is:
+  if (regret < 0) 0
+  else regret/sum of positive regrets
+  
+  inputs: vals = regrets
+          num_succs = number of actions
+
+          what is dsi?
+          it looks like if it's the first iteration, it plays strategy at index dsi 100%, and other strategiees at 0%
+          i've seen other cfr stuff use 1/numactions to play a random strategy
+          i'm guessing dsi stands for Default Strategy Index
+
+          probs is the outputted strategy
+
+  The above comment by the author says this is used for regrets to find the current strategy, but can also be used for sumprobs
+  to find the average strategy
+  -Brian
+*/
 template <typename T> void RMProbs(const T *vals, int num_succs, int dsi, double *probs) {
   double sum = 0;
   for (int s = 0; s < num_succs; ++s) {
@@ -93,6 +116,31 @@ template void ComputeOurValsBucketed<unsigned char>(const unsigned char *all_cs_
 
 // Uses the current strategy (from regrets or sumprobs) to compute the weighted average of
 // the successor values.  This version for unabstracted systems.
+
+/* Calculates ev for each hand
+  ev = summation of (ev of taking an action * how often we take that action) 
+      for all actions
+  Calculates current strategy by using RMProbs function
+
+    inputs: all_cs_vals = regrets
+            succ_vals = ev of taking an action
+            what is lbd? it looks like it used for finding a starting point in all_cs_values
+            all_cs_vals then is larger than numhands*numactions, so i'm not exactly sure what that
+            variable is either, I just know that it has regrets. I'll need to see how this function
+            is implemented to really understand what all_cs_vals is.
+    outputs: vals
+
+An idea is that there is a betting game tree, that does not take into account chance
+So the regrets at each node would need to contain regrets for each possible card.
+On the initial street it would just be regrets for all possible hands, but on the turn it would need to be
+regrets for all possible hands * 49 turns
+
+Or all regrets are stored together somewhere 
+
+that might be what all_cs_vals and lbd are used for
+
+-Brian
+*/
 template <typename T> void ComputeOurVals(const T *all_cs_vals, int num_hole_card_pairs,
 					  int num_succs, int dsi, shared_ptr<double []> *succ_vals,
 					  int lbd, shared_ptr<double []> vals) {
@@ -145,6 +193,19 @@ template void SetCurrentAbstractedStrategy<unsigned short>(const unsigned short 
 template void SetCurrentAbstractedStrategy<unsigned char>(const unsigned char *all_regrets,
 							  int num_buckets, int num_succs, int dsi,
 							  double *all_cs_probs);
+
+/* Calculates ev of each hand at showdown
+  The algorithm is not super simple and I won't comment here about how it works.
+  This algorithm allows you to get ev for each hand with only ~100*1326 calculations (to account for blockers),
+  instead of doing a 1326*1326 calculations. This is the reason vector based cfr (range vs range) is so much faster.
+
+  inputs: node = gametree node
+          hands = possible (unique?) hands, likely sorted by hand strength
+          see folded function comment for better description of probs
+          opp probs, sum opp probs, opp probs for each card
+  outputs: ev for each hand
+  -Brian
+*/
 
 shared_ptr<double []> Showdown(Node *node, const CanonicalCards *hands, double *opp_probs,
 			       double sum_opp_probs, double *total_card_probs) {
@@ -202,6 +263,31 @@ shared_ptr<double []> Showdown(Node *node, const CanonicalCards *hands, double *
   return vals;
 }
 
+
+/* Calculates ev of each hand when someone folds
+  ev = (halfpot or -halfpot depending on if hero or villain wins) *
+        opponent reach probability
+  opponent reach probability has to account for blockers, this is handled by 
+
+  + opp_prob - (total_card_probs[hi] + total_card_probs[lo])
+
+  opponent has a reach probability for each hand (opp probs)
+  you can find the sum of these reach probabilities (sum_opp_probs)
+  you can find the sum of reach probabilities for hands that contain a specific card (total_card_probs)
+  
+  to get blocker adjusted reach probability, take sum_opp_probs and subtract total_card_probs for both of our cards
+  then you need to add back villains reach prob for our exact hand, because we subtracted the reach prob
+  for that hand twice (as this hand is in both total_card_probs[card0] and total_card_probs[card1])
+  ^worded kind of poorly, hope it makes sense
+
+  inputs: node = gametree node, so we know who folded
+          p = which is the active player this iteration? ip or oop?
+          hands = possible (unique?) hands
+          opp probs, sum opp probs, opp probs for each card
+
+  outputs: ev for each hand
+  -Brian
+*/
 shared_ptr<double []> Fold(Node *node, int p, const CanonicalCards *hands, double *opp_probs,
 			   double sum_opp_probs, double *total_card_probs) {
   int max_card1 = Game::MaxCard() + 1;
@@ -230,6 +316,17 @@ shared_ptr<double []> Fold(Node *node, int p, const CanonicalCards *hands, doubl
   return vals;
 }
 
+/* updates opp reach sum and card reach sum (see Fold function for information on card reach) after they take an action
+  inputs: st = street (to get number of hands)
+          canonicalcards *hands = all unique hands on this board
+          oop_probs = probability that villain took this action for each hand
+
+  outputs: ret_sum_opp_probs = opp reach sum
+            total_card_prob = opp reach for each card
+
+  I really do not understand this functions name
+  -Brian
+*/
 void CommonBetResponseCalcs(int st, const CanonicalCards *hands, double *opp_probs,
 			    double *ret_sum_opp_probs, double *total_card_probs) {
   double sum_opp_probs = 0;
@@ -249,6 +346,23 @@ void CommonBetResponseCalcs(int st, const CanonicalCards *hands, double *opp_pro
   }
   *ret_sum_opp_probs = sum_opp_probs;
 }
+
+/* This function is called for every possible hand (by function ProcessOppProbs). It updates opponent reach for each hand after his action.
+    It also updates his sumprobs (cumulative strategy, can be used to find average strategy at any point)
+    warmup looks like an optional parameter for the solver to give less weight to strategies played in earlier iterations.
+
+    inputs: enc = hand index
+            num_succs = number of actions/number of successor nodes
+            reach prob = current probability that villain holds this hand at this node
+            current_probs = villains current strategy at this node (calculated by regret matching in the ProcessOppProbs function, before this function is called)
+            it = iteration, used for the warmup stuff
+            soft warmup, hardwarmup
+            sumprob scaling is not even used in this function. It is used in a similar function below.
+            sumprob scaling might have to do with preventing overflow? 
+    outputs: succ_opp_probs = probability opponent reaches each successor node with current hand
+            sumprobs = villains strategy sum (used for finding average strategy)
+    -Brian
+*/
 
 static void UpdateSumprobsAndSuccOppProbs(int enc, int num_succs, double reach_prob,
 					  double *current_probs,
@@ -275,7 +389,8 @@ static void UpdateSumprobsAndSuccOppProbs(int enc, int num_succs, double reach_p
     }
   }
 }
-
+/*similar as above function but int* sumprobs instead of double* sumprobs
+  also uses sumprob scaling and downscaling to prevent overflow? -Brian*/
 static void UpdateSumprobsAndSuccOppProbs(int enc, int num_succs, double reach_prob,
 					  double *current_probs,
 					  shared_ptr<double []> *succ_opp_probs, int it,
@@ -318,6 +433,8 @@ static void UpdateSumprobsAndSuccOppProbs(int enc, int num_succs, double reach_p
 // We have the current_probs already (from current_strategy_) so we use
 // them directly.  The second version below uses regret matching to get the
 // current probs.
+
+/*This one is for cfr+ with abstraction, see below function for what we're interested in -Brian*/
 template <typename T>
 void ProcessOppProbs(Node *node, const CanonicalCards *hands, int *street_buckets,
 		     double *opp_probs, shared_ptr<double []> *succ_opp_probs,
@@ -370,6 +487,32 @@ template void ProcessOppProbs<double>(Node *node, const CanonicalCards *hands,
 				      double *current_probs, int it, int soft_warmup,
 				      int hard_warmup, double sumprob_scaling,
 				      CFRStreetValues<double> *sumprobs);
+
+/*For all possible hands-
+  Calculates opponents strategy with reget matching
+  Calls function UpdateSumprobsAndSuccOppProbs to update villains strategysum at this node and update 
+  their reach probability for each successor node based on their current strategy for this node
+  
+  inputs: node = current node
+          lbd = not sure exactly what it is, it's used to find an offset for pointer arithmetic
+          hads = all possible hands
+          bucketed = im not sure, the function above is used for running cfr+ with abstraction.
+          this might be used for isomorphisms?
+          street_buckets = only used if bucketed = true
+          opp_probs = opponent reach probabilities for every hand for the current node
+          cs_vals = all regret values
+          dsi = default strategy index? used on the first iteration in RMProbs function when regrets = 0
+          it = iteration, used for warmups when calculating strategy sum (placing less weight on earlier iterations)
+          softwarmup,hardwarmup = solver parameters
+          sumprob scaling not even used when using doubles
+
+
+          
+  outputs: succ_opp_probs = opponents reach probabilities for successor nodes = current reach probability * currentstrategy
+            sumprobs = current node strategy sum (used for calculating average strategy at the end)
+
+  -Brian
+*/
 
 template <typename T1, typename T2>
 void ProcessOppProbs(Node *node, int lbd, const CanonicalCards *hands, bool bucketed,
@@ -537,6 +680,11 @@ void VCFR::UpdateRegretsBucketed(Node *node, int **street_buckets, double *vals,
   }
 }
 #endif
+
+/*
+    I think every iteration is saved in the cfr folder. This function is for deleting the old files,
+     as we're just interested in the last iteration. - Brian
+ */
 
 void DeleteOldFiles(const CardAbstraction &ca, const string &betting_abstraction_name,
 		    const CFRConfig &cc, int it) {
