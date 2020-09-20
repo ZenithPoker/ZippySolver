@@ -3,6 +3,12 @@
 
 #include <string>
 
+/*
+  Directories of static files and CFR base for storing
+  buckets and CFR checkpoints (regrets & sumprobs) respectively
+  --Jon
+*/
+
 class Files {
 public:
   static void Init(void);

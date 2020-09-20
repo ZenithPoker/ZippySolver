@@ -10,6 +10,18 @@
 using std::string;
 using std::vector;
 
+/*
+  Split a string
+    line
+  with seperating character
+    sep
+  into string vector
+    comps
+  Empty strings may be allowed in resulting vector if
+    allow_empty
+  is true
+  --Jon
+*/
 void Split(const char *line, char sep, bool allow_empty,
 	   vector<string> *comps) {
   comps->clear();
@@ -37,6 +49,14 @@ void Split(const char *line, char sep, bool allow_empty,
   }
 }
 
+/*
+  Parse comma seperated doubles from string
+    s
+  into double vector
+    values
+
+  --Jon
+*/
 void ParseDoubles(const string &s, vector<double> *values) {
   vector<string> comps;
   Split(s.c_str(), ',', false, &comps);
@@ -54,6 +74,14 @@ void ParseDoubles(const string &s, vector<double> *values) {
   }
 }
 
+/*
+  Parse comma seperated signed ints from string
+    s
+  into double vector
+    values
+
+  --Jon
+*/
 void ParseInts(const string &s, vector<int> *values) {
   vector<string> comps;
   Split(s.c_str(), ',', false, &comps);
@@ -70,6 +98,14 @@ void ParseInts(const string &s, vector<int> *values) {
   }
 }
 
+/*
+  Parse comma seperated unsigned ints from string
+    s
+  into double vector
+    values
+
+  --Jon
+*/
 void ParseUnsignedInts(const string &s, vector<unsigned int> *values) {
   vector<string> comps;
   Split(s.c_str(), ',', false, &comps);

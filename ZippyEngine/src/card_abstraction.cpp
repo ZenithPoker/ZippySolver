@@ -19,6 +19,12 @@ using std::string;
 using std::unique_ptr;
 using std::vector;
 
+/*
+  Populate CardAbstraction from card_abstraction_params
+  Requires MaxStreet+1 items in Bucketings and BucketThresholds
+
+  --Jon
+*/
 CardAbstraction::CardAbstraction(const Params &params) {
   card_abstraction_name_ = params.GetStringValue("CardAbstractionName");
   Split(params.GetStringValue("Bucketings").c_str(), ',', false,

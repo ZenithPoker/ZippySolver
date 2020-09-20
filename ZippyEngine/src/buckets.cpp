@@ -8,6 +8,13 @@
 #include "game.h"
 #include "io.h"
 
+/*
+  Load buckets from file for a given CardAbstraction
+  Load num_buckets per street always from
+    static/num_buckets.{game_name}.{num_ranks}.{num_suits}.{max_street}.{ca_bucketing(street)}.{street}
+  Load buckets only if numb_only is false from
+    static/buckets.{game_name}.{num_ranks}.{num_suits}.{max_street}.{ca_bucketing(street)}.{street}
+  --Jon*/
 Buckets::Buckets(const CardAbstraction &ca, bool numb_only) {
   BoardTree::Create();
   int max_street = Game::MaxStreet();
@@ -41,24 +48,24 @@ Buckets::Buckets(const CardAbstraction &ca, bool numb_only) {
       // Need to use an unsigned int for this
       unsigned int num_hands = (unsigned int)num_boards * (unsigned int)num_hole_card_pairs;
       long long int lli_num_hands = num_hands;
-  
+
       sprintf(buf, "%s/buckets.%s.%i.%i.%i.%s.%i", Files::StaticBase(), Game::GameName().c_str(),
 	      Game::NumRanks(), Game::NumSuits(), max_street, ca.Bucketing(st).c_str(), st);
       Reader reader(buf);
       long long int file_size = reader.FileSize();
       if (file_size == lli_num_hands * 2) {
-	short_buckets_[st] = new unsigned short[num_hands];
-	for (unsigned int h = 0; h < num_hands; ++h) {
-	  short_buckets_[st][h] = reader.ReadUnsignedShortOrDie();
-	}
+	      short_buckets_[st] = new unsigned short[num_hands];
+	      for (unsigned int h = 0; h < num_hands; ++h) {
+	        short_buckets_[st][h] = reader.ReadUnsignedShortOrDie();
+	      }
       } else if (file_size == lli_num_hands * 4) {
-	int_buckets_[st] = new int[num_hands];
-	for (unsigned int h = 0; h < num_hands; ++h) {
-	  int_buckets_[st][h] = reader.ReadIntOrDie();
-	}
+	      int_buckets_[st] = new int[num_hands];
+	      for (unsigned int h = 0; h < num_hands; ++h) {
+	        int_buckets_[st][h] = reader.ReadIntOrDie();
+	      }
       } else {
-	fprintf(stderr, "BucketsInstance::Initialize: Unexpected file size %lli\n", file_size);
-	exit(-1);
+	      fprintf(stderr, "BucketsInstance::Initialize: Unexpected file size %lli\n", file_size);
+	      exit(-1);
       }
     }
   }
@@ -70,6 +77,7 @@ Buckets::Buckets(void) {
   int_buckets_ = nullptr;
 }
 
+// Destructor to free memory
 Buckets::~Buckets(void) {
   int max_street = Game::MaxStreet();
   if (short_buckets_) {
