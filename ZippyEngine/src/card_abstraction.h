@@ -7,6 +7,12 @@
 
 class Params;
 
+/*
+  Game class for storing card abstraction (i.e. bucketing) information
+  per street
+  --Jon
+*/
+
 class CardAbstraction {
  public:
   CardAbstraction(const Params &params);

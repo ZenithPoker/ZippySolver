@@ -8,6 +8,25 @@
 
 class Params;
 
+/*
+  Game class for storing game definition from game_params with
+  methods for counting permutations of remaining deals
+
+  Number of combinations of hole cards per street given in
+    num_hole_card_pairs_
+  Number of cards on board per street given in
+    num_board_cards_
+
+  Seems that implementation currently only supports two players
+
+  Constraints:
+    0 < NumHoleCards <= 2 (currently)
+    NumRanks > 0
+    NumSuits > 0
+    FirstToAct contains MaxStreet+1 values (first to act per street)
+  -- Jon
+*/
+
 class Game {
  public:
   static void Initialize(const Params &params);

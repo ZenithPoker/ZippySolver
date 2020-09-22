@@ -9,12 +9,50 @@
 
 using std::string;
 
+/*
+  Param file type utility types & functions.
+  Param files are list of key-value pairs with the following format:
+    {key}[whitespace]{value}[newline]
+  Comments in param files begin with #
+    [#]{comment}
+
+  Params must be added using AddParam to populate the vectors
+    param_names_ ({key} type string}
+    param_values_ ({value} type ParamValue)
+    param_types_ ({value_type} ParamType)
+
+  After param type definitions are given paramaters can be loaded using
+    ReadFromFile
+  which parses {key}{value} pairs with type given by param_types_ storing
+  the result in the corresponding param_values_ struct
+
+  After parsing, values can be retreived using
+    GetStringValue
+    GetIntValue
+    GetDoubleValue
+    GetBooleanValue
+
+  If a param in param_names_ was not found during ReadFromFile then
+    IsSet
+  returns false
+  -- Jon
+ */
+
 Params::Params(void) {
 }
 
 Params::~Params(void) {
 }
 
+/* Add param with {key}=name and type of {value} ptype
+   enum ParamType {
+     P_STRING,
+     P_INT,
+     P_DOUBLE,
+     P_BOOLEAN
+   };
+   -- Jon
+*/
 void Params::AddParam(const string &name, ParamType ptype) {
   param_names_.push_back(name);
   param_types_.push_back(ptype);
@@ -26,6 +64,8 @@ void Params::AddParam(const string &name, ParamType ptype) {
   param_values_.push_back(v);
 }
 
+/* Return index of param with {key}=name, exit with -1 if not found
+*/
 int Params::GetParamIndex(const char *name) const {
   int i;
   int num_params = param_names_.size();
@@ -39,6 +79,10 @@ int Params::GetParamIndex(const char *name) const {
   return i;
 }
 
+/* Read paramater file after populating params using AddParam
+   On failure to parse param, exit with -1
+   -- Jon
+ */
 void Params::ReadFromFile(const char *filename) {
   Reader reader(filename);
   string line;
@@ -94,6 +138,10 @@ void Params::ReadFromFile(const char *filename) {
   }
 }
 
+/* Following functions return {value} of given type.
+   If type requested does not match ptype of {value} exit with -1
+
+   --Jon*/
 string Params::GetStringValue(const char *name) const {
   int i = GetParamIndex(name);
   if (param_types_[i] != P_STRING) {
@@ -130,6 +178,8 @@ bool Params::GetBooleanValue(const char *name) const {
   return (bool)param_values_[i].i;
 }
 
+/* Returns if the  param was set when loading file with Params::ReadFromFile
+ */
 bool Params::IsSet(const char *name) const {
   int i = GetParamIndex(name);
   return param_values_[i].set;

@@ -9,6 +9,12 @@
 
 using std::string;
 
+/*
+  Directories of static files and CFR base for storing
+  buckets and CFR checkpoints (regrets & sumprobs) respectively
+  --Jon
+*/
+
 string Files::old_cfr_base_ = "";
 string Files::new_cfr_base_ = "";
 string Files::static_base_ = "";

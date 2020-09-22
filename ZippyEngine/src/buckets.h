@@ -5,6 +5,15 @@
 
 class CardAbstraction;
 
+/*
+  Class for holding card buckets per street.
+    NumBuckets
+      Number of buckets per street
+    Bucket
+      Return bucket for hand per street
+    None
+      Return true if street is not bucketed, else false
+  */
 class Buckets {
 public:
   Buckets(const CardAbstraction &ca, bool numb_only);

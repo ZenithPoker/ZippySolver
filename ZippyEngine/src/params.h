@@ -4,6 +4,35 @@
 #include <string>
 #include <vector>
 
+/*
+  Param file type utility types & functions.
+  Param files are list of key-value pairs with the following format:
+    {key}[whitespace]{value}[newline]
+  Comments in param files begin with #
+    [#]{comment}
+
+  Params must be added using AddParam to populate the vectors
+    param_names_ ({key} type string}
+    param_values_ ({value} type ParamValue)
+    param_types_ ({value_type} ParamType)
+
+  After param type definitions are given paramaters can be loaded using
+    ReadFromFile
+  which parses {key}{value} pairs with type given by param_types_ storing
+  the result in the corresponding param_values_ struct
+
+  After parsing, values can be retreived using
+    GetStringValue
+    GetIntValue
+    GetDoubleValue
+    GetBooleanValue
+
+  If a param in param_names_ was not found during ReadFromFile then
+    IsSet
+  returns false
+  -- Jon
+ */
+
 enum ParamType {
   P_STRING,
   P_INT,

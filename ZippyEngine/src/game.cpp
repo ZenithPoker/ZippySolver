@@ -34,6 +34,24 @@ static int Factorial(int n) {
   return n * Factorial(n - 1);
 }
 
+/*
+  Populate game class given game_params loaded from file.
+  Some bounds check on inputs and calculation of number of
+  ways (permutations) of dealing out hole cards and board cards
+  for the given game definition.
+
+  Number of combinations of hole cards per street given in
+    num_hole_card_pairs_
+  Number of cards on board per street given in
+    num_board_cards_
+
+  Constraints:
+    0 < NumHoleCards <= 2 (currently)
+    NumRanks > 0
+    NumSuits > 0
+    FirstToAct contains MaxStreet+1 values (first to act per street)
+  -- Jon
+*/
 void Game::Initialize(const Params &params) {
   game_name_ = params.GetStringValue("GameName");
   max_street_ = params.GetIntValue("MaxStreet");
@@ -60,7 +78,7 @@ void Game::Initialize(const Params &params) {
   for (int st = 0; st <= max_street_; ++st) {
     first_to_act_[st] = ftav[st];
   }
-  
+
   num_cards_for_street_.reset(new int[max_street_ + 1]);
   num_cards_for_street_[0] = params.GetIntValue("NumHoleCards");
   if (max_street_ >= 1) {
