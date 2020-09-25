@@ -499,7 +499,7 @@ shared_ptr<double []> **Player::GetSuccReachProbs(Node *node, int gbd, const Buc
 	    OutputCards(lo);
 	    printf("\n");
 	    const Card *board = BoardTree::Board(max_street, msbd_);
-	    OutputCards(board);
+	    OutputCards(board, 5);
 	    printf("\n");
 	    exit(-1);
 	  }

@@ -388,9 +388,9 @@ void Player::Go(unsigned long long int num_duplicate_hands) {
 #if 0
     OutputCards(cards + 2 * num_players_, num_board_cards);
     printf("\n");
-    OutputCards(cards);
+    OutputCards(cards, 2);
     printf("\n");
-    OutputCards(cards + 2);
+    OutputCards(cards + 2, 2);
     printf("\n");
     fflush(stdout);
 #endif

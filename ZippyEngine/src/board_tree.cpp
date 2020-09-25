@@ -264,9 +264,9 @@ void BoardTree::DealRawBoards(Card *board, int st) {
     int canon_bd = BoardTree::LookupBoard(canon_board, st - 1);
     if (canon_bd >= num_boards_[st - 1]) {
       fprintf(stderr, "DealRawBoards: couldn't look up canonical board\n");
-      OutputCards(board);
+      OutputCards(board, 3);
       printf(" -> ");
-      OutputCards(canon_board);
+      OutputCards(canon_board, 3);
       printf("\n");
       fflush(stdout);
       exit(-1);
