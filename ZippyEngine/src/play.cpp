@@ -386,11 +386,11 @@ void Player::Go(unsigned long long int num_duplicate_hands) {
     // Assume 2 hole cards
     DealNCards(cards, num_board_cards + 2 * num_players_);
 #if 0
-    OutputNCards(cards + 2 * num_players_, num_board_cards);
+    OutputCards(cards + 2 * num_players_, num_board_cards);
     printf("\n");
-    OutputTwoCards(cards);
+    OutputCards(cards);
     printf("\n");
-    OutputTwoCards(cards + 2);
+    OutputCards(cards + 2);
     printf("\n");
     fflush(stdout);
 #endif

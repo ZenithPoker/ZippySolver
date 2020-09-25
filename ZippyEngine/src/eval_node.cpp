@@ -272,7 +272,7 @@ void Player::Showdown(Node *a_node, Node *b_node, shared_ptr<double []> *reach_p
       Card hi = cards[0];
       Card lo = cards[1];
       int enc = hi * max_card1 + lo;
-      OutputTwoCards(hi, lo);
+      OutputCards(hi, lo);
       printf(" %f (%i)\n", reach_probs[1][enc], i);
       fflush(stdout);
     }
@@ -494,12 +494,12 @@ shared_ptr<double []> **Player::GetSuccReachProbs(Node *node, int gbd, const Buc
 	  if (prob > 1.0 || prob < 0) {
 	    fprintf(stderr, "OOB prob %f (%f * %f) enc %i st %i\n", prob, reach_probs[p][enc],
 		    probs[s], enc, st);
-	    OutputCard(hi);
+	    OutputCards(hi);
 	    printf(" ");
-	    OutputCard(lo);
+	    OutputCards(lo);
 	    printf("\n");
 	    const Card *board = BoardTree::Board(max_street, msbd_);
-	    OutputFiveCards(board);
+	    OutputCards(board);
 	    printf("\n");
 	    exit(-1);
 	  }
@@ -508,7 +508,7 @@ shared_ptr<double []> **Player::GetSuccReachProbs(Node *node, int gbd, const Buc
 	  if (b_pos_ == 1 && st == 1 && node->NonterminalID() == 4 && node->PlayerActing() == 1 &&
 	      hi == MakeCard(1, 3) && lo == MakeCard(1, 2) && msbd_ == 11) {
 	    printf("BC/C i %i ", i);
-	    OutputTwoCards(hi, lo);
+	    OutputCards(hi, lo);
 	    printf(" s %i %f * %f = %f\n", s, reach_probs[p][enc], probs[s], prob);
 	    fflush(stdout);
 	  }

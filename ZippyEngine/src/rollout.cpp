@@ -113,7 +113,7 @@ static short *RiverHandStrength(const Card *board, bool wins) {
 	// beats[k] - lose is the WML
 	short wml = ((short)beats[k]) - lose;
 	values[enc] = wml;
-	// OutputTwoCards(hi, lo);
+	// OutputCards(hi, lo);
 	// printf(" %i %i %i %u\n", (int)wml, beats[k], (int)lose, enc);
       }
     }
@@ -218,7 +218,7 @@ static short *ComputePreflopPercentiles(double *percentiles, int num_percentiles
 	  if (cum >= threshold) {
 	    // Undo the normalization
 	    pct_vals[hcp * num_percentiles + p] = (short)(w - max_wml);
-	    OutputTwoCards(hi, lo);
+	    OutputCards(hi, lo);
 	    printf(" %f %i\n", pct, w - max_wml);
 	    fflush(stdout);
 	    ++p;

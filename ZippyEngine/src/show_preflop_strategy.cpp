@@ -82,7 +82,7 @@ void Show(Node *node, const string &action_sequence, int target_p, const Buckets
 	} else {
 	  printf("%s ", action_sequence.c_str());
 	}
-	OutputTwoCards(hi, lo);
+	OutputCards(hi, lo);
 	double sum = 0;
 	if (i_values) {
 	  for (int s = 0; s < num_succs; ++s) {

@@ -153,7 +153,7 @@ double RGBR::Go(int it, int p, const BettingAbstraction &ba) {
     const CanonicalCards *hands = hand_tree_->Hands(0, 0);
     for (int i = 0; i < num_hole_card_pairs; ++i) {
       const Card *hole_cards = hands->Cards(i);
-      OutputTwoCards(hole_cards);
+      OutputCards(hole_cards);
       printf(" %f (i %u)\n", vals[i], i);
     }
     fflush(stdout);

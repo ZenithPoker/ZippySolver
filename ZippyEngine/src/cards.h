@@ -4,6 +4,7 @@
 #include <string>
 
 // These need to be before the include of game.h
+// Type defintions for Card, Rank, Suit
 typedef int Card;
 Card MakeCard(int rank, int suit);
 
@@ -12,28 +13,29 @@ Card MakeCard(int rank, int suit);
 #define Rank(card)           (card / Game::NumSuits())
 #define Suit(card)           (card % Game::NumSuits())
 
+
+/*
+	Output methods for logging card to command line
+	Takes card object and prints suit and rank to command line
+*/
 void OutputRank(int rank);
-void OutputCard(Card card);
 void CardName(Card c, std::string *name);
-void OutputTwoCards(Card c1, Card c2);
-void OutputTwoCards(const Card *cards);
-void OutputThreeCards(Card c1, Card c2, Card c3);
-void OutputThreeCards(const Card *cards);
-void OutputFourCards(Card c1, Card c2, Card c3, Card c4);
-void OutputFourCards(const Card *cards);
-void OutputFiveCards(Card c1, Card c2, Card c3, Card c4, Card c5);
-void OutputFiveCards(const Card *cards);
-void OutputSixCards(Card c1, Card c2, Card c3, Card c4, Card c5, Card c6);
-void OutputSixCards(const Card *cards);
-void OutputSevenCards(Card c1, Card c2, Card c3, Card c4, Card c5,
-		      Card c6, Card c7);
-void OutputSevenCards(const Card *cards);
-void OutputNCards(const Card *cards, int n);
-Card ParseCard(const char *str);
-void ParseTwoCards(const char *str, bool space_separated, Card *cards);
+// overloaded methods for outputing cards, passed as 7 arguments or an array with size n
+void OutputCards(Card card);
+void OutputCards(Card c1, Card c2);
+void OutputCards(Card c1, Card c2, Card c3);
+void OutputCards(Card c1, Card c2, Card c3, Card c4);
+void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5);
+void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5, Card c6);
+void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5,
+		      	 Card c6, Card c7);
+void OutputCards(const Card *cards, int n); 
+
+Card ParseCard(const char *str); // parse from string to card object
+void ParseTwoCards(const char *str, bool space_separated, Card *cards);  //parse two cards, specify if seperated by space
 void ParseThreeCards(const char *str, bool space_separated, Card *cards);
 void ParseFiveCards(const char *str, bool space_separated, Card *cards);
-bool InCards(Card c, const Card *cards, int num_cards);
-int MaxSuit(Card *board, int num_board);
+bool InCards(Card c, const Card *cards, int num_cards); //set IN operator
+int MaxSuit(Card *board, int num_board); // return maximum suit
 
 #endif

@@ -46,7 +46,7 @@ void Show(Node *node, const string &action_sequence, const Buckets &buckets,
       Card lo = cards[1];
       int enc = hi * max_card1 + lo;
       printf("%s p %i ", action_sequence.c_str(), p);
-      OutputTwoCards(cards);
+      OutputCards(cards);
       printf(" %f\n", reach_probs.Get(p, enc));
     }
   }	
