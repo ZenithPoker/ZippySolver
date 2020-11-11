@@ -69,7 +69,7 @@ void Show(Node *node, const Buckets &buckets, const CFRValues &values) {
 	seen_buckets.insert(b);
 	offset = b * num_succs;
       }
-      OutputTwoCards(hi, lo);
+      OutputCards(hi, lo);
       double sum = 0;
       if (i_values) {
 	for (int s = 0; s < num_succs; ++s) {

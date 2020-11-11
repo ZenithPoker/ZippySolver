@@ -20,7 +20,7 @@ static void Show(unsigned int street) {
   for (unsigned int bd = 0; bd < num_boards; ++bd) {
     const Card *board = BoardTree::Board(street, bd);
     printf("%u ", bd);
-    OutputNCards(board, num_board_cards);
+    OutputCards(board, num_board_cards);
     printf("\n");
   }
 }

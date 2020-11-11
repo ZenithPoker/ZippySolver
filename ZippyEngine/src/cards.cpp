@@ -26,25 +26,6 @@ void OutputRank(int rank) {
   }
 }
 
-void OutputCard(Card card) {
-  int rank = Rank(card);
-  int suit = Suit(card);
-
-  OutputRank(rank);
-  switch (suit) {
-  case 0:
-    printf("c"); break;
-  case 1:
-    printf("d"); break;
-  case 2:
-    printf("h"); break;
-  case 3:
-    printf("s"); break;
-  default:
-    fprintf(stderr, "Illegal suit\n");
-    exit(-1);
-  }
-}
 
 void CardName(Card c, string *name) {
   *name = "";
@@ -79,102 +60,99 @@ void CardName(Card c, string *name) {
   }
 }
 
-void OutputTwoCards(Card c1, Card c2) {
-  OutputCard(c1);
-  printf(" ");
-  OutputCard(c2);
+void OutputCards(Card card) {
+  int rank = Rank(card);
+  int suit = Suit(card);
+
+  OutputRank(rank);
+  switch (suit) {
+  case 0:
+    printf("c"); break;
+  case 1:
+    printf("d"); break;
+  case 2:
+    printf("h"); break;
+  case 3:
+    printf("s"); break;
+  default:
+    fprintf(stderr, "Illegal suit\n");
+    exit(-1);
+  }
 }
 
-void OutputTwoCards(const Card *cards) {
-  OutputTwoCards(cards[0], cards[1]);
+void OutputCards(Card c1, Card c2) {
+  OutputCards(c1);
+  printf(" ");
+  OutputCards(c2);
 }
 
-void OutputThreeCards(Card c1, Card c2, Card c3) {
-  OutputCard(c1);
+void OutputCards(Card c1, Card c2, Card c3) {
+  OutputCards(c1);
   printf(" ");
-  OutputCard(c2);
+  OutputCards(c2);
   printf(" ");
-  OutputCard(c3);
+  OutputCards(c3);
 }
 
-void OutputThreeCards(const Card *cards) {
-  OutputThreeCards(cards[0], cards[1], cards[2]);
+
+void OutputCards(Card c1, Card c2, Card c3, Card c4) {
+  OutputCards(c1);
+  printf(" ");
+  OutputCards(c2);
+  printf(" ");
+  OutputCards(c3);
+  printf(" ");
+  OutputCards(c4);
 }
 
-void OutputFourCards(Card c1, Card c2, Card c3, Card c4) {
-  OutputCard(c1);
+
+void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5) {
+  OutputCards(c1);
   printf(" ");
-  OutputCard(c2);
+  OutputCards(c2);
   printf(" ");
-  OutputCard(c3);
+  OutputCards(c3);
   printf(" ");
-  OutputCard(c4);
+  OutputCards(c4);
+  printf(" ");
+  OutputCards(c5);
 }
 
-void OutputFourCards(const Card *cards) {
-  OutputFourCards(cards[0], cards[1], cards[2], cards[3]);
+void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5, Card c6) {
+  OutputCards(c1);
+  printf(" ");
+  OutputCards(c2);
+  printf(" ");
+  OutputCards(c3);
+  printf(" ");
+  OutputCards(c4);
+  printf(" ");
+  OutputCards(c5);
+  printf(" ");
+  OutputCards(c6);
 }
 
-void OutputFiveCards(Card c1, Card c2, Card c3, Card c4, Card c5) {
-  OutputCard(c1);
-  printf(" ");
-  OutputCard(c2);
-  printf(" ");
-  OutputCard(c3);
-  printf(" ");
-  OutputCard(c4);
-  printf(" ");
-  OutputCard(c5);
-}
-
-void OutputFiveCards(const Card *cards) {
-  OutputFiveCards(cards[0], cards[1], cards[2], cards[3], cards[4]);
-}
-
-void OutputSixCards(Card c1, Card c2, Card c3, Card c4, Card c5, Card c6) {
-  OutputCard(c1);
-  printf(" ");
-  OutputCard(c2);
-  printf(" ");
-  OutputCard(c3);
-  printf(" ");
-  OutputCard(c4);
-  printf(" ");
-  OutputCard(c5);
-  printf(" ");
-  OutputCard(c6);
-}
-
-void OutputSixCards(const Card *cards) {
-  OutputSixCards(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5]);
-}
-
-void OutputSevenCards(Card c1, Card c2, Card c3, Card c4, Card c5,
+void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5,
 		      Card c6, Card c7) {
-  OutputCard(c1);
+  OutputCards(c1);
   printf(" ");
-  OutputCard(c2);
+  OutputCards(c2);
   printf(" ");
-  OutputCard(c3);
+  OutputCards(c3);
   printf(" ");
-  OutputCard(c4);
+  OutputCards(c4);
   printf(" ");
-  OutputCard(c5);
+  OutputCards(c5);
   printf(" ");
-  OutputCard(c6);
+  OutputCards(c6);
   printf(" ");
-  OutputCard(c7);
+  OutputCards(c7);
 }
 
-void OutputSevenCards(const Card *cards) {
-  OutputSevenCards(cards[0], cards[1], cards[2], cards[3], cards[4], cards[5],
-		   cards[6]);
-}
-
-void OutputNCards(const Card *cards, int n) {
+void OutputCards(const Card *cards, int n) {
   for (int i = 0; i < n; ++i) {
     if (i > 0) printf(" ");
-    OutputCard(cards[i]);
+    OutputCards(cards[i]);
   }
 }
 
@@ -182,6 +160,7 @@ Card MakeCard(int rank, int suit) {
   return rank * Game::NumSuits() + suit;
 }
 
+// return card object from valid string. e.g. 'Ad' -> (12, 1) Card
 Card ParseCard(const char *str) {
   char c = str[0];
   int rank;
@@ -218,6 +197,8 @@ Card ParseCard(const char *str) {
   }
 }
 
+// parse two cards, specifying if seperated by space. if space_sep=True, Ad Kh -> (12, 1) and (11,2)
+// requires a Card array to be passed, must ensure Card array is memory safe.
 void ParseTwoCards(const char *str, bool space_separated, Card *cards) {
   cards[0] = ParseCard(str);
   if (space_separated) {
@@ -227,6 +208,7 @@ void ParseTwoCards(const char *str, bool space_separated, Card *cards) {
   }
 }
 
+// parse three cards, analogous to two case.
 void ParseThreeCards(const char *str, bool space_separated, Card *cards) {
   cards[0] = ParseCard(str);
   if (space_separated) {
@@ -253,11 +235,15 @@ void ParseFiveCards(const char *str, bool space_separated, Card *cards) {
   }
 }
 
+// Set IN operator.
+// Returns true if c is in the set of cards
 bool InCards(Card c, const Card *cards, int num_cards) {
   for (int i = 0; i < num_cards; ++i) if (c == cards[i]) return true;
   return false;
 }
 
+// returns maximum suit given a board (card array)
+// suit order is defined in game.cpp
 int MaxSuit(Card *board, int num_board) {
   int max_suit = Suit(board[0]);
   for (int i = 1; i < num_board; ++i) {
