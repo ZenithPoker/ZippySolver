@@ -248,7 +248,7 @@ int BoardTree::LookupBoard(const Card *board, int st) {
   int ret = lookup_[st][code];
   if (ret == kMaxInt) {
     fprintf(stderr, "BoardTree::LookupBoard() invalid board; st %i code %i\n", st, code);
-    OutputNCards(board, num_board_cards);
+    OutputCards(board, num_board_cards);
     printf("\n");
     fflush(stdout);
     exit(-1);
@@ -264,9 +264,9 @@ void BoardTree::DealRawBoards(Card *board, int st) {
     int canon_bd = BoardTree::LookupBoard(canon_board, st - 1);
     if (canon_bd >= num_boards_[st - 1]) {
       fprintf(stderr, "DealRawBoards: couldn't look up canonical board\n");
-      OutputThreeCards(board);
+      OutputCards(board, 3);
       printf(" -> ");
-      OutputThreeCards(canon_board);
+      OutputCards(canon_board, 3);
       printf("\n");
       fflush(stdout);
       exit(-1);

@@ -1526,7 +1526,7 @@ void TCFR::Run(void) {
 	unsigned long long int num = g_preflop_nums[p][b];
 	if (num > 0) {
 	  printf("P%u %f ", p, val / (double)num);
-	  OutputTwoCards(hi, lo);
+	  OutputCards(hi, lo);
 	  printf(" (%u)\n", b);
 	  g_preflop_nums[p][b] = 0;
 	}

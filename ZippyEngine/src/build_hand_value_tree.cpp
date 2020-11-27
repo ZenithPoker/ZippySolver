@@ -20,7 +20,7 @@ static void DealOneCard(void) {
   Card c1;
   int *tree = new int[max_card + 1];
   for (c1 = 0; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     int i1 = c1;
@@ -41,7 +41,7 @@ static void DealTwoCards(HandEvaluator *he) {
   Card c1, c2;
   int **tree = new int *[max_card + 1];
   for (c1 = 1; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     cards[0] = c1;
@@ -50,7 +50,7 @@ static void DealTwoCards(HandEvaluator *he) {
     tree[i1] = tree1;
     for (c2 = 0; c2 < c1; ++c2) {
       printf("  ");
-      OutputCard(c2);
+      OutputCards(c2);
       printf("\n");
       fflush(stdout);
       cards[1] = c2;
@@ -75,7 +75,7 @@ static void DealThreeCards(HandEvaluator *he) {
   Card c1, c2, c3;
   int ***tree = new int **[max_card + 1];
   for (c1 = 2; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     cards[0] = c1;
@@ -115,7 +115,7 @@ static void DealFourCards(HandEvaluator *he) {
   Card c1, c2, c3, c4;
   int ****tree = new int ***[max_card + 1];
   for (c1 = 3; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     cards[0] = c1;
@@ -165,7 +165,7 @@ static void DealFiveCards(HandEvaluator *he) {
   Card c1, c2, c3, c4, c5;
   int *****tree = new int ****[max_card + 1];
   for (c1 = 4; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     cards[0] = c1;
@@ -224,7 +224,7 @@ static void DealSixCards(HandEvaluator *he) {
   Card c1, c2, c3, c4, c5, c6;
   int ******tree = new int *****[max_card + 1];
   for (c1 = 5; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     cards[0] = c1;
@@ -292,7 +292,7 @@ static void DealSevenCards(HandEvaluator *he) {
   Card c1, c2, c3, c4, c5, c6, c7;
   int *******tree = new int ******[max_card + 1];
   for (c1 = 6; c1 <= max_card; ++c1) {
-    OutputCard(c1);
+    OutputCards(c1);
     printf("\n");
     fflush(stdout);
     cards[0] = c1;
@@ -301,7 +301,7 @@ static void DealSevenCards(HandEvaluator *he) {
     tree[i1] = tree1;
     for (c2 = 5; c2 < c1; ++c2) {
       printf("  ");
-      OutputCard(c2);
+      OutputCards(c2);
       printf("\n");
       fflush(stdout);
       cards[1] = c2;

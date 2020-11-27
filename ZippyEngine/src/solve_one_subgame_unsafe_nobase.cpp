@@ -108,7 +108,7 @@ void Show(Node *node, const string &action_sequence, int target_p, const Buckets
     } else {
       printf("%s ", action_sequence.c_str());
     }
-    OutputTwoCards(cards);
+    OutputCards(cards, 2);
     double sum = 0;
     if (i_values) {
       for (int s = 0; s < num_succs; ++s) {
@@ -161,8 +161,8 @@ SubgameSolver::SubgameSolver(const CardAbstraction &card_abstraction,
   
   const Card *board = BoardTree::Board(solve_st_, target_bd_);
   //
-  fprintf(stderr, "Resolve st %i gbd %i\n", solve_st, target_bd_);  
-  OutputNCards(board, solve_st+2);  
+  OutputCards(board, solve_st+2, true);
+  fprintf(stderr, "Resolve st %i gbd %i\n", solve_st, target_bd_);    
 }
 
 // Currently assume that this is a street-initial node.
