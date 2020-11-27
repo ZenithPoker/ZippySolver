@@ -30,6 +30,7 @@ void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5, Card c6);
 void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5,
 		      	 Card c6, Card c7);
 void OutputCards(const Card *cards, int n); 
+void OutputCards(const Card *cards, int n, bool newline); 
 
 Card ParseCard(const char *str); // parse from string to card object
 void ParseTwoCards(const char *str, bool space_separated, Card *cards);  //parse two cards, specify if seperated by space

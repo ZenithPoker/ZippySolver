@@ -51,7 +51,7 @@ all:	bin/show_num_boards bin/show_boards bin/build_hand_value_tree bin/build_nul
 	bin/build_kmeans_buckets bin/crossproduct bin/prify bin/show_num_buckets \
 	bin/build_betting_tree bin/show_betting_tree bin/run_cfrp bin/run_tcfr bin/run_ecfr \
 	bin/run_rgbr bin/solve_all_subgames bin/solve_all_backup_subgames \
-	bin/solve_one_subgame_safe bin/solve_one_subgame_unsafe bin/progressively_solve_subgames \
+	bin/solve_one_subgame_safe bin/solve_one_subgame_unsafe  bin/solve_one_subgame_unsafe_nobase bin/progressively_solve_subgames \
 	bin/assemble_subgames bin/dump_file bin/show_preflop_strategy bin/show_preflop_reach_probs \
 	bin/show_probs_at_node bin/play bin/head_to_head bin/mc_node bin/eval_node bin/sampled_br \
 	bin/run_approx_rgbr bin/test_backup_tree bin/estimate_ram bin/find_gaps bin/keep_backups \
@@ -130,6 +130,10 @@ bin/solve_one_subgame_safe:	obj/solve_one_subgame_safe.o $(OBJS) $(HEADS)
 
 bin/solve_one_subgame_unsafe:	obj/solve_one_subgame_unsafe.o $(OBJS) $(HEADS)
 	g++ $(LDFLAGS) $(CFLAGS) -o bin/solve_one_subgame_unsafe obj/solve_one_subgame_unsafe.o \
+	$(OBJS) $(LIBRARIES)
+
+bin/solve_one_subgame_unsafe_nobase:	obj/solve_one_subgame_unsafe_nobase.o $(OBJS) $(HEADS)
+	g++ $(LDFLAGS) $(CFLAGS) -o bin/solve_one_subgame_unsafe_nobase obj/solve_one_subgame_unsafe_nobase.o \
 	$(OBJS) $(LIBRARIES)
 
 bin/progressively_solve_subgames:	obj/progressively_solve_subgames.o $(OBJS) $(HEADS)

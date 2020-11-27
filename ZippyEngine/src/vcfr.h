@@ -55,6 +55,7 @@ class VCFR {
 						    const HandTree *hand_tree,
 						    const std::string &action_sequence);
   std::shared_ptr<CFRValues> Sumprobs(void) const {return sumprobs_;}
+  std::shared_ptr<CFRValues> Regrets(void) const {return regrets_;}
   void SetSumprobs(std::shared_ptr<CFRValues> &src) {sumprobs_ = src;}
   void SetRegrets(std::shared_ptr<CFRValues> &src) {regrets_ = src;}
   void ClearSumprobs(void) {sumprobs_.reset();}

@@ -149,11 +149,16 @@ void OutputCards(Card c1, Card c2, Card c3, Card c4, Card c5,
   OutputCards(c7);
 }
 
-void OutputCards(const Card *cards, int n) {
+void OutputCards(const Card *cards, int n, bool newline) {
   for (int i = 0; i < n; ++i) {
     if (i > 0) printf(" ");
     OutputCards(cards[i]);
   }
+  if (newline) printf("\n");
+}
+
+void OutputCards(const Card *cards, int n) {
+  OutputCards(cards, n, false);
 }
 
 Card MakeCard(int rank, int suit) {

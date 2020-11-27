@@ -5,4 +5,4 @@ NNR true
 RegretFloors 0,0,0,0
 RegretScaling 16,16,16,16
 SumprobScaling 16,16,16,16
-SoftWarmup 100
+SoftWarmup 200

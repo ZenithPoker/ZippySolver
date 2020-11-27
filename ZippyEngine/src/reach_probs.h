@@ -12,6 +12,7 @@ class ReachProbs {
 public:
   ~ReachProbs(void) {}
   static ReachProbs *CreateRoot(void);
+  static ReachProbs *Load(void);
   static std::shared_ptr<ReachProbs []> CreateSuccReachProbs(Node *node, int gbd, int lbd,
 							     const CanonicalCards *hands,
 							     const Buckets &buckets,

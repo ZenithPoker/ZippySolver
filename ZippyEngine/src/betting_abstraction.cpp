@@ -13,6 +13,11 @@
 using std::string;
 using std::vector;
 
+/*
+  Bet sizes seperated by ',', per bet (up to MaxBets) seperated by ';' and streets seperated by '|' 
+  Bet sizes given as decimal fraction of pot.
+  --Jon
+*/
 static void ParseBetSizes(const string &param_value,
 			  vector<vector<vector<double> > > *bet_sizes) {
   vector<string> v1;
@@ -44,7 +49,10 @@ static void ParseBetSizes(const string &param_value,
     }
   }
 }
-
+/*
+  Parse BetSizeMultipliers. Multipliers are not used.
+  --Jon
+*/
 static void ParseMultipliers(const string &param_value, vector<vector<double> > *multipliers) {
   vector<string> v1;
   Split(param_value.c_str(), '|', true, &v1);
@@ -69,6 +77,10 @@ static void ParseMultipliers(const string &param_value, vector<vector<double> > 
   }
 }
 
+/*
+  Parse 'MaxBets': maximimum number of bets per street (comma sereprated integers).
+  --Jon
+*/
 static void ParseMaxBets(const Params &params, const string &param, vector<int> *max_bets) {
   if (! params.IsSet(param.c_str())) {
     fprintf(stderr, "%s must be set\n", param.c_str());
@@ -89,6 +101,13 @@ static void ParseMaxBets(const Params &params, const string &param, vector<int> 
   }
 }
 
+/*
+  Parse 'MinBets': bets per street which MUST be minimum bets.
+  Street seperated by ';' and bet seperated by ','.
+  For exmaple on a 2 street game: '0,1;0,2' would imply the first two bets 
+  on the first street and the first and third bet on the second street MUST be minbets.
+  --Jon
+*/
 void BettingAbstraction::ParseMinBets(const string &value, vector< vector<bool> > *min_bets) {
   int max_street = Game::MaxStreet();
   vector<string> v1;
@@ -123,6 +142,11 @@ void BettingAbstraction::ParseMinBets(const string &value, vector< vector<bool> 
   }
 }
 
+/* 
+  Parse merge rules (i.e. ReentrantBetSizes)
+  TODO:Not sure about reentrant stuff yet
+  --Jon
+*/
 static void ParseMergeRules(const string &value, vector< vector<int> > *merge_rules) {
   int max_street = Game::MaxStreet();
   int num_players = Game::NumPlayers();
@@ -155,6 +179,11 @@ static void ParseMergeRules(const string &value, vector< vector<int> > *merge_ru
   }
 }
 
+/*
+  Populate BettingAbstraction from betting_abstraction_params
+  See betting_abstraction_params.cpp for description of params
+  --Jon
+*/
 BettingAbstraction::BettingAbstraction(const Params &params) {
   betting_abstraction_name_ = params.GetStringValue("BettingAbstractionName");
   limit_ = params.GetBooleanValue("Limit");
