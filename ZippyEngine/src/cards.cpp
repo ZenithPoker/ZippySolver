@@ -86,7 +86,7 @@ void OutputTwoCards(Card c1, Card c2) {
 }
 
 void OutputTwoCards(const Card *cards) {
-  OutputTwoCards(cards[0], cards[1]);
+  OutputTwoCards(cards[0], cards[1]);  
 }
 
 void OutputThreeCards(Card c1, Card c2, Card c3) {
@@ -171,11 +171,16 @@ void OutputSevenCards(const Card *cards) {
 		   cards[6]);
 }
 
-void OutputNCards(const Card *cards, int n) {
+void OutputNCards(const Card *cards, int n, bool newline) {
   for (int i = 0; i < n; ++i) {
     if (i > 0) printf(" ");
     OutputCard(cards[i]);
   }
+  if (newline) printf("\n");
+}
+
+void OutputNCards(const Card *cards, int n) {
+  OutputNCards(cards, n, false);
 }
 
 Card MakeCard(int rank, int suit) {

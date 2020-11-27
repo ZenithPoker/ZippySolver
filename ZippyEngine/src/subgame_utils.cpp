@@ -44,14 +44,22 @@ using std::vector;
 BettingTrees *CreateSubtrees(int st, int player_acting, int last_bet_to, int target_p,
 			     const BettingAbstraction &betting_abstraction) {
   // Assume subtree rooted at street-initial node
+  int num_players = Game::NumPlayers();
   int last_bet_size = 0;
   int num_street_bets = 0;
+  int num_bets = 0;  
   BettingTreeBuilder betting_tree_builder(betting_abstraction, target_p);
+  string key;  
   int num_terminals = 0;
-  // Should call routine from mp_betting_tree.cpp instead
+  int num_players_to_act = 2;
+  unique_ptr<bool []> folded(new bool[num_players]);
+  for (int p = 0; p < num_players; ++p) folded[p] = false;
+  // Should call routine from mp_betting_tree.cpp instead // DONE : -- Jon
   shared_ptr<Node> subtree_root =
-    betting_tree_builder.CreateNoLimitSubtree(st, last_bet_size, last_bet_to, num_street_bets,
-					      player_acting, target_p, &num_terminals);
+    betting_tree_builder.CreateMPSubtree(st, last_bet_size, last_bet_to, num_street_bets,
+					 num_bets, player_acting, num_players_to_act, folded.get(), target_p, &key, &num_terminals);
+    
+                
   // Delete the nodes under subtree_root?  Or does garbage collection
   // automatically take care of it because they are shared pointers.
   return new BettingTrees(subtree_root.get());

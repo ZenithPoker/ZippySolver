@@ -46,7 +46,7 @@ void UnsafeEGCFR::SolveSubgame(BettingTrees *subtrees, int solve_bd, const Reach
 
   for (it_ = 1; it_ <= num_its; ++it_) {
     // Go from high to low to mimic slumbot2017 code
-    for (int p = (int)num_players - 1; p >= 0; --p) {
+    for (int p = (int)num_players - 1; p >= 0; --p) {    
       HalfIteration(subtrees, p, reach_probs.Get(p^1), hand_tree, action_sequence);
     }
   }

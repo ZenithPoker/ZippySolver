@@ -29,6 +29,7 @@ void OutputSevenCards(Card c1, Card c2, Card c3, Card c4, Card c5,
 		      Card c6, Card c7);
 void OutputSevenCards(const Card *cards);
 void OutputNCards(const Card *cards, int n);
+void OutputNCards(const Card *cards, int n, bool newline);
 Card ParseCard(const char *str);
 void ParseTwoCards(const char *str, bool space_separated, Card *cards);
 void ParseThreeCards(const char *str, bool space_separated, Card *cards);
